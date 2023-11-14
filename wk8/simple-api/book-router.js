@@ -57,4 +57,27 @@ router.get('/books/:id', (req, res, next) => {
   }
 })
 
+router.put('/books/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+  const index = res.app.locals.books.findIndex(e => e.id === id)
+  if (index === -1) {
+    res.status(404).json({ message: 'not found' })
+  } else {
+    res.app.locals.books[index].title = req.body.title
+    res.app.locals.books[index].content = req.body.content
+    res.status(202).json({ message: 'book modified' })
+  }
+})
+
+router.delete('/books/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+  const index = res.app.locals.books.findIndex(e => e.id === id)
+  if (index === -1) {
+    res.status(404).json({ message: 'not found' })
+  } else {
+    res.app.locals.books.splice(index, 1)
+    res.status(204).json({ message: 'book deleted' })
+  }
+})
+
 export default router
