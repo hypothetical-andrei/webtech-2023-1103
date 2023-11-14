@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #registrationForm { 
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-evenly;
+    }
+
+    .container {
+      width: 300px;
+      height: 10vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div id="registrationForm">
+    <div class="container">
+      <label for="username">Username</label>
+      <input type="text" placeholder="username">
+    </div>
+    <div class="container">
+      <label for="password">Password</label>
+      <input type="password">
+    </div>
+    <div class="container">
+      <label for="location">Location</label>
+      <input type="text" placeholder="location">
+    </div>
+    <div class="container">
+      <label for="role">Role</label>
+      <input type="text" placeholder="role">
+    </div>
+    <div class="container">
+      <input type="button" value="click me!">
+    </div>
+  </div>
+</body>
+</html>
