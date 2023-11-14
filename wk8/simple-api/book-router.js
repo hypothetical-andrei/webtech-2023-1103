@@ -35,7 +35,7 @@ router.post('/books', (req, res, next) => {
         // res.status(400).json({ message: 'cannot add existing book' })
         throw new Error('duplicate book id')
       } else {
-        app.locals.books.push(book)
+        res.app.locals.books.push(book)
         res.status(201).json({ message: 'created book' })
       }
     } else {
