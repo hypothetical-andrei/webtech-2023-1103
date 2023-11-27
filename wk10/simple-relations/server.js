@@ -15,7 +15,15 @@ const University = sequelize.define('university', {
   name: Sequelize.STRING
 })
 
+const Course = sequelize.define('course', {
+  name: Sequelize.STRING
+})
+
 University.hasMany(Student)
+University.hasMany(Course)
+
+Course.belongsToMany(Student, { through: 'enrollments' })
+Student.belongsToMany(Course, { through: 'enrollments' } )
 
 await sequelize.sync({ alter: true })
 
@@ -95,7 +103,6 @@ app.get('/universities/:uid/students/:sid', async (req, res, next) => {
   }
 })
 
-
 app.put('/universities/:uid/students/:sid', async (req, res, next) => {
   try {
     const results = await Student.update(req.body, {
@@ -134,6 +141,51 @@ app.delete('/universities/:uid/students/:sid', async (req, res, next) => {
   }
 })
 
+app.post('/universities/:uid/courses', async (req, res, next) => {
+  try {
+    const university = await University.findByPk(req.params.uid)
+    if (university) {
+      const course = new Course(req.body)
+      course.universityId = university.id
+      await course.save()
+      res.status(201).json(course)
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/universities/:uid/courses', async (req, res, next) => {
+  try {
+    const university = await University.findByPk(req.params.uid, { include: [Course] })
+    if (university) {
+      res.status(200).json(university.courses)
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.post('/courses/:cid/enrollments', async (req, res, next) => {
+  try {
+    const course = await Course.findByPk(req.params.cid)
+    const student = await Student.findByPk(req.body.sid)
+    if (course && student) {
+      await course.addStudent(student)
+      res.status(201).json({ message: 'enrolled' })
+    } else {
+      res.status(404).json({ message: 'not found' })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.post('/students/:sid/enrollments', async (req, res, next) => {})
 
 app.use((err, req, res, next) => {
   console.warn(err)
