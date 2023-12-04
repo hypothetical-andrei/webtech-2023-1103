@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op
 
@@ -30,6 +31,7 @@ await sequelize.sync({ alter: true })
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 // get /employees?filter=a
